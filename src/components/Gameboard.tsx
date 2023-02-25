@@ -45,25 +45,16 @@ function Gameboard({
   }
   useEffect(() => {
     const getWaldoImage = async (id: string) => {
-      if (id === "waldo-1") {
-        try {
-          const url = await getDownloadURL(
-            ref(
-              storage,
-              "gs://where-waldo-a6530.appspot.com/game-images/waldo-1-app.jpg"
-            )
-          );
-          // console.log("url", url);
-          setImageSrc(url);
-        } catch (e) {
-          console.error(e);
-        }
-      } else {
+      try {
         const url = await getDownloadURL(
-          ref(storage, "game-images/waldo-2-app.jpg")
+          ref(
+            storage,
+            `gs://where-waldo-a6530.appspot.com/game-images/${id}-app.jpg`
+          )
         );
-        // console.log(url);
         setImageSrc(url);
+      } catch (e) {
+        console.error(e);
       }
     };
     // get coordinates and data
@@ -75,9 +66,6 @@ function Gameboard({
         const { imgHeight, imgWidth } = docSnap.data();
         const { x: waldoX, y: waldoY, xRange: waldoXRange, yRange: waldoYRange } = docSnap.data().waldo;
         const { x: wizardX, y: wizardY, xRange: wizardXRange, yRange: wizardYRange } = docSnap.data().wizard;
-        console.log(`Img Height: ${imgHeight}, imgWidth: ${imgWidth}`);
-        console.log(`waldo x: ${waldoX} y: ${waldoY} xRange: ${waldoXRange} yRange: ${waldoYRange}`);
-        console.log(`wizard x: ${wizardX} y: ${wizardY} xRange: ${wizardXRange} yRange: ${wizardYRange}`);
         const waldoCoords = getRelativeCoords(imgHeight, imgWidth, waldoX, waldoY, waldoXRange, waldoYRange);
         const wizardCoords = getRelativeCoords(imgHeight, imgWidth, wizardX, wizardY, wizardXRange, wizardYRange);
         setWaldoCoords(waldoCoords);
