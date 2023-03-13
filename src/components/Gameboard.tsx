@@ -24,6 +24,7 @@ function Gameboard({
   setLastTimeScore,
 }: GameboardPropsType) {
   const [imageSrc, setImageSrc] = useState("");
+  const [timeKeeping, setTimeKeeping] = useState({startTime: Date.now()})
   const [showClickMenu, setShowClickMenu] = useState(false);
   // lastScreemClickCoords are the coords for the click on the entire screen
   // This helps position the clickMenu Component
@@ -108,6 +109,8 @@ function Gameboard({
   // sets GameEnded when both characters are found
   useEffect(() => {
     if (charactersFound.waldo && charactersFound.wizard) {
+      const timeinSeconds = (Date.now() - timeKeeping.startTime)/1000;
+      setLastTimeScore(timeinSeconds);
       setGameEnded(true);
     }
   }, [charactersFound])
