@@ -25,30 +25,51 @@ function Gameboard({
 }: GameboardPropsType) {
   const [imageSrc, setImageSrc] = useState("");
   const [showClickMenu, setShowClickMenu] = useState(false);
-  const [lastClickCoords, setLastClickCoords] = useState({x:0, y:0});
+  // lastScreemClickCoords are the coords for the click on the entire screen
+  // This helps position the clickMenu Component
+  const [lastScreenClickCoords, setLastScreenClickCoords] = useState({x:0, y:0});
+  // lastRelClickCoords are the relative coordinates from the click
+  // on the image itself. This is used to see if the click was on the correct character
+  const [lastRelClickCoords, setLastRelClickCoords] = useState({xRel:0, yRel:0});
   const [waldoCoords, setWaldoCoords] = useState<CharacterCoordsType | null>();
   const [wizardCoords, setWizardCoords] = useState<CharacterCoordsType | null>();
+  const [charactersFound, setCharactersFound] = useState({waldo:false, wizard:false});
   
   function handleImageClick(e: React.MouseEvent<HTMLImageElement, MouseEvent>) {
     // console.log("currentTarget Height", e.currentTarget.height)
+    // console.log("currentTarget Width", e.currentTarget.width)
     // console.dir(e);
     // console.dir(e.target);
     // console.dir(e.currentTarget);
     // these coordinates are the actual coordinates from the document.
     // offset values provide the compensation for margin and padding around the image
-    const x = e.pageX - e.currentTarget.offsetLeft;
-    const y = e.pageY - e.currentTarget.offsetTop;
+    const x = e.pageX - (e.currentTarget.offsetParent as HTMLElement).offsetLeft;
+    const y = e.pageY - (e.currentTarget.offsetParent as HTMLElement).offsetTop;
     console.log(`Click was on screenX: ${e.screenX} screenY: ${e.screenY}`);
     console.log("Click was on:");
     console.log({x,y});
-    console.log(`The size of this image is ${e.currentTarget.height} x ${e.currentTarget.width}`)
+    console.log(`The size of this image is ${e.currentTarget.width} x ${e.currentTarget.height}`);
     const xRel = x / e.currentTarget.width;
     const yRel = y / e.currentTarget.height;
     console.log(`The relative coords are X: ${xRel} and Y: ${yRel}`);
-    setLastClickCoords({x: e.screenX, y: e.screenY});
+    setLastRelClickCoords({xRel: xRel, yRel: yRel});
+    setLastScreenClickCoords({x: e.screenX, y: e.screenY});
     setShowClickMenu(true);
-    
   }
+  
+  function handleCharacterClick(character: "waldo" | "wizard") {
+    if (character === "waldo" && !charactersFound.waldo) {
+      // check if lastRelClickCoords match for Waldo Character
+      const waldoXFound = Math.abs(lastRelClickCoords.xRel - waldoCoords?.xRel!) < waldoCoords?.xVarience!
+      const waldoYFound = Math.abs(lastRelClickCoords.yRel - waldoCoords?.yRel!) < waldoCoords?.yVarience!
+      setCharactersFound((state) => ({...state, waldo: waldoXFound && waldoYFound}));
+    } else if (character === "wizard" && !charactersFound.wizard) {
+      const wizardXFound = Math.abs(lastRelClickCoords.xRel - wizardCoords?.xRel!) < wizardCoords?.xVarience!
+      const wizardYFound = Math.abs(lastRelClickCoords.yRel - wizardCoords?.yRel!) < wizardCoords?.yVarience!
+      setCharactersFound((state) => ({...state, wizard: wizardXFound && wizardYFound}));
+    }
+  }
+  // Gets image and character coords at mount 
   useEffect(() => {
     const getWaldoImage = async (id: string) => {
       try {
@@ -83,12 +104,19 @@ function Gameboard({
     getCharacterCoords();
     getWaldoImage(gameSelected);
   }, []);
+  
+  // sets GameEnded when both characters are found
+  useEffect(() => {
+    if (charactersFound.waldo && charactersFound.wizard) {
+      setGameEnded(true);
+    }
+  }, [charactersFound])
 
   return (
     <div className="relative">
       {!imageSrc ? <p>Loading...</p> : null}
       <img onClick={handleImageClick} src={imageSrc} alt="waldo image should be here"/>
-      <ClickMenu show={showClickMenu} coords={lastClickCoords} setShowClickMenu={setShowClickMenu}/>
+      <ClickMenu show={showClickMenu} coords={lastScreenClickCoords} setShowClickMenu={setShowClickMenu} handleCharacterClick={handleCharacterClick}/>
     </div>
   );
 }
