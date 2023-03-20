@@ -54,7 +54,7 @@ function Gameboard({
     const yRel = y / e.currentTarget.height;
     console.log(`The relative coords are X: ${xRel} and Y: ${yRel}`);
     setLastRelClickCoords({xRel: xRel, yRel: yRel});
-    setLastScreenClickCoords({x: e.screenX, y: e.screenY});
+    setLastScreenClickCoords({x: e.pageX, y: e.screenY});
     setShowClickMenu(true);
   }
   
