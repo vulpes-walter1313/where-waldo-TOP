@@ -20,7 +20,7 @@ export default function ClickMenu({
     return (
       <div
         className={`bg-gray-900 fixed z-10 p-4`}
-        style={{ top: `${coords.y - 100}px`, left: `${coords.x - 50}px` }}
+        style={{ top: `${coords.y - 110}px`, left: `${coords.x - 150}px` }}
       >
         <div className="flex justify-between text-gray-50 w-48">
           <p className="text-gray-50">Who did you find?</p>
