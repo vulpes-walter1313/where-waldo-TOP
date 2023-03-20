@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Gameboard from "./components/Gameboard";
 import GameStart from "./components/GameStart";
+import GameStats from "./components/GameStats";
 
 function App() {
   const [gameStarted, setGameStarted] = useState(false);
@@ -31,6 +32,7 @@ function App() {
             setLastTimeScore={setLastTimeScore}
           />
         )}
+        {gameSelected && gameEnded && <GameStats lastTimeScore={lastTimeScore}/>}
       </main>
     </div>
   );
