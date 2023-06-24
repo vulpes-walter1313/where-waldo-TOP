@@ -10,12 +10,18 @@ function App() {
   const [lastTimeScore, setLastTimeScore] = useState(0);
 
   return (
-    <div className="p-8">
+    <div className="min-h-screen bg-slate-800 p-8">
       <header className="flex flex-col items-center">
-        <h1 className="text-5xl font-bold">Where's Waldo?</h1>
-        <p>
+        <h1 className="text-5xl font-bold text-slate-50">Where's Waldo?</h1>
+        <p className="mb-8 text-slate-100">
           Made by Vosram as a practice from{" "}
-          <a href="https://www.theodinproject.com">The Odin Project</a>
+          <a
+            href="https://www.theodinproject.com"
+            rel="noreferrer"
+            className="text-amber-500 underline"
+          >
+            The Odin Project
+          </a>
         </p>
       </header>
       <main>
@@ -32,7 +38,9 @@ function App() {
             setLastTimeScore={setLastTimeScore}
           />
         )}
-        {gameSelected && gameEnded && <GameStats lastTimeScore={lastTimeScore}/>}
+        {gameSelected && gameEnded && (
+          <GameStats lastTimeScore={lastTimeScore} />
+        )}
       </main>
     </div>
   );
