@@ -49,10 +49,10 @@ function GameStats({ lastTimeScore }: GameStatsProps) {
   }, []);
 
   return (
-    <div className="border border-red-500 w-3/4 my-0 mx-auto">
-      <div className="flex flex-col items-center">
+    <div className="w-[35rem] bg-slate-600 p-8 mx-auto">
+      <div className="flex flex-col items-center text-slate-100">
         <h2 className="font-bold text-xl">Time:</h2>
-        <p>Your time {lastTimeScore} seconds!</p>
+        <p className="text-lg">Your time {lastTimeScore} seconds!</p>
       </div>
       {isInTopTen && (
         <RecordScore

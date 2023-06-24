@@ -32,14 +32,15 @@ function RecordScore({ lastTimeScore, scoreToDeleteId }: RecordScoreProps) {
     }
   }
   return (
-    <div>
-      <p>Enter a name to submit your score!</p>
-      <div>
+    <div className="mx-auto flex flex-col items-center my-8">
+      <h3 className="text-slate-100 text-xl">You're in the Top Ten!</h3>
+      <p className="text-slate-100 capitalize">Enter a name to submit your score!</p>
+      <div className="flex flex-col my-4 gap-4">
         <input
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="border border-neutral-900 rounded-sm"
+          className="border border-neutral-900 text-slate-800 bg-slate-200 rounded-md p-2"
         />
         <button
           type="button"
