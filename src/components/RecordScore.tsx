@@ -5,10 +5,18 @@ import { firestore } from "../lib/firebase";
 type RecordScoreProps = {
   lastTimeScore: number;
   scoreToDeleteId?: string | null;
+  gameSelected: "waldo-1" | "waldo-2";
 };
-function RecordScore({ lastTimeScore, scoreToDeleteId }: RecordScoreProps) {
+function RecordScore({
+  lastTimeScore,
+  scoreToDeleteId,
+  gameSelected,
+}: RecordScoreProps) {
   const [username, setUsername] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const scoreBoardName = `top-scores-${
+    gameSelected === "waldo-1" ? "easy" : "hard"
+  }`;
 
   async function recordScore(
     lastTimeScore: number,
@@ -16,16 +24,16 @@ function RecordScore({ lastTimeScore, scoreToDeleteId }: RecordScoreProps) {
   ) {
     if (scoreToDeleteId == null) {
       // addDoc
-      const newScoreRef = await addDoc(collection(firestore, "top-scores"), {
+      const newScoreRef = await addDoc(collection(firestore, scoreBoardName), {
         score: lastTimeScore,
         username: username,
       });
       console.log(newScoreRef.id);
     } else {
       // delete the score to be deleted
-      await deleteDoc(doc(firestore, "top-scores", scoreToDeleteId));
+      await deleteDoc(doc(firestore, scoreBoardName, scoreToDeleteId));
       // addDoc with new score
-      const newScoreRef = await addDoc(collection(firestore, "top-scores"), {
+      const newScoreRef = await addDoc(collection(firestore, scoreBoardName), {
         score: lastTimeScore,
         username: username,
       });
@@ -36,7 +44,9 @@ function RecordScore({ lastTimeScore, scoreToDeleteId }: RecordScoreProps) {
   return (
     <div className="mx-auto my-8 flex flex-col items-center">
       <h3 className="text-xl text-slate-100">You're in the Top Ten!</h3>
-      {submitted ? null : (
+      {submitted ? (
+        <a href="/">Play Again</a>
+      ) : (
         <div>
           <p className="capitalize text-slate-100">
             Enter a name to submit your score!

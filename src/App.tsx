@@ -19,6 +19,7 @@ function App() {
             href="https://www.theodinproject.com"
             rel="noreferrer"
             className="text-amber-500 underline"
+            target="_blank"
           >
             The Odin Project
           </a>
@@ -39,7 +40,10 @@ function App() {
           />
         )}
         {gameSelected && gameEnded && (
-          <GameStats lastTimeScore={lastTimeScore} />
+          <GameStats
+            lastTimeScore={lastTimeScore}
+            gameSelected={gameSelected as "waldo-1" | "waldo-2"}
+          />
         )}
       </main>
     </div>

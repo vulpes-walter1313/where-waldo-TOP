@@ -5,15 +5,19 @@ import RecordScore from "./RecordScore";
 
 type GameStatsProps = {
   lastTimeScore: number;
+  gameSelected: "waldo-1" | "waldo-2";
 };
 
-function GameStats({ lastTimeScore }: GameStatsProps) {
+function GameStats({ lastTimeScore, gameSelected }: GameStatsProps) {
   const [isInTopTen, setIsInTopTen] = useState(false);
   const [scoreToDeleteId, setScoreToDeleteId] = useState<string | null>(null);
+  const scoreBoardName = `top-scores-${
+    gameSelected === "waldo-1" ? "easy" : "hard"
+  }`;
 
   useEffect(() => {
     async function getScores() {
-      const snapshot = await getDocs(collection(firestore, "top-scores"));
+      const snapshot = await getDocs(collection(firestore, scoreBoardName));
       const topTen: { id: string; score: number; username: string }[] = [];
       snapshot.forEach((doc) => {
         console.log(doc.id, " => ", doc.data());
@@ -49,15 +53,16 @@ function GameStats({ lastTimeScore }: GameStatsProps) {
   }, []);
 
   return (
-    <div className="w-[35rem] bg-slate-600 p-8 mx-auto">
+    <div className="mx-auto w-[35rem] bg-slate-600 p-8">
       <div className="flex flex-col items-center text-slate-100">
-        <h2 className="font-bold text-xl">Time:</h2>
+        <h2 className="text-xl font-bold">Time:</h2>
         <p className="text-lg">Your time {lastTimeScore} seconds!</p>
       </div>
       {isInTopTen && (
         <RecordScore
           lastTimeScore={lastTimeScore}
           scoreToDeleteId={scoreToDeleteId}
+          gameSelected={gameSelected}
         />
       )}
     </div>
