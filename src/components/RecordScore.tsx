@@ -1,6 +1,7 @@
 import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
 import React, { useState } from "react";
 import { firestore } from "../lib/firebase";
+import ScoreBoard from "./ScoreBoard";
 
 type RecordScoreProps = {
   lastTimeScore: number;
@@ -45,7 +46,16 @@ function RecordScore({
     <div className="mx-auto my-8 flex flex-col items-center">
       <h3 className="text-xl text-slate-100">You're in the Top Ten!</h3>
       {submitted ? (
-        <a href="/">Play Again</a>
+        <div>
+          <div>
+            {scoreBoardName.includes("easy") ? (
+              <ScoreBoard scoreBoard="top-scores-easy" />
+            ) : (
+              <ScoreBoard scoreBoard="top-scores-hard" />
+            )}
+          </div>
+          <a href="/">Play Again</a>
+        </div>
       ) : (
         <div>
           <p className="capitalize text-slate-100">
