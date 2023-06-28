@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
 
@@ -32,6 +33,7 @@ function Root() {
           </ul>
         </nav>
         <Outlet />
+        <ReactQueryDevtools initialIsOpen={false}/>
       </QueryClientProvider>
     </div>
   );
