@@ -4,17 +4,22 @@ import ScoreBoard from "../components/ScoreBoard";
 export default function ScoreBoardPage() {
   return (
     <div className="min-h-screen bg-slate-800 p-8">
-      <h1 className="text-slate-50 text-4xl text-center mb-6">Score Boards</h1>
-      <section className="flex gap-8 mx-auto max-w-7xl justify-center">
+      <h1 className="mb-6 text-center text-4xl text-slate-50">Score Boards</h1>
+      <section className="mx-auto flex max-w-7xl justify-center gap-8">
         <div>
-          <ScoreBoard scoreBoard="top-scores-easy"/>
+          <ScoreBoard scoreBoard="top-scores-easy" />
         </div>
         <div>
-          <ScoreBoard scoreBoard="top-scores-hard"/>
+          <ScoreBoard scoreBoard="top-scores-hard" />
         </div>
       </section>
-      <section className="flex flex-col items-center m-8">
-        <a href="/" className="text-slate-50 bg-slate-700 rounded-md py-2 px-4 block">Back to Game?</a>
+      <section className="m-8 flex flex-col items-center">
+        <a
+          href="/"
+          className="block rounded-md bg-slate-700 py-2 px-4 text-slate-50"
+        >
+          Back to Game?
+        </a>
       </section>
     </div>
   );
