@@ -4,6 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../lib/firebase";
 import { twMerge } from "tailwind-merge";
 import { useQuery } from "@tanstack/react-query";
+import useGetScores from "../hooks/useGetScores";
 
 type ScoreBoardProps = {
   scoreBoard: "top-scores-easy" | "top-scores-hard";
@@ -11,20 +12,13 @@ type ScoreBoardProps = {
 };
 
 function ScoreBoard({ scoreBoard, className }: ScoreBoardProps) {
-  const { data, isInitialLoading, isLoading, isError, error } = useQuery({
-    queryKey: ["scores", scoreBoard],
-    queryFn: async () => {
-      const snapshot = await getDocs(collection(firestore, scoreBoard));
-      const topTen: ScoresBoardDataType[] = [];
-      snapshot.forEach((doc) => topTen.push(doc.data() as ScoresBoardDataType));
-      return topTen;
-    },
-  });
+  const { data, isInitialLoading, isLoading, isError, error } = useGetScores(scoreBoard);
+  
   const containerStyles = "bg-slate-700 px-8 py-4 rounded-md";
-  const styles = twMerge(containerStyles, `${containerStyles} ${className}`);
+  const styles = twMerge(containerStyles, `${className ? className : ""}`);
 
   if (isInitialLoading || isLoading) {
-    return <p>Loading...</p>;
+    return <p className="text-slate-50">Loading...</p>;
   }
 
   if (isError) {
