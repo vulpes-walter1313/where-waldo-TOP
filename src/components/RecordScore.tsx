@@ -1,7 +1,8 @@
-import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, setDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { firestore } from "../lib/firebase";
 import ScoreBoard from "./ScoreBoard";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type RecordScoreProps = {
   lastTimeScore: number;
@@ -13,35 +14,55 @@ function RecordScore({
   scoreToDeleteId,
   gameSelected,
 }: RecordScoreProps) {
+  const queryClient = useQueryClient();
   const [username, setUsername] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const scoreBoardName = `top-scores-${
+  const scoreBoardName: "top-scores-easy" | "top-scores-hard" = `top-scores-${
     gameSelected === "waldo-1" ? "easy" : "hard"
   }`;
 
-  async function recordScore(
-    lastTimeScore: number,
-    scoreToDeleteId: string | null | undefined
-  ) {
+  const mutation = useMutation({
+    mutationFn: recordScore,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["scores", scoreBoardName] });
+    },
+  });
+
+  async function recordScore({
+    lastTimeScore,
+    scoreToDeleteId,
+  }: {
+    lastTimeScore: number;
+    scoreToDeleteId: string | null | undefined;
+  }) {
     if (scoreToDeleteId == null) {
       // addDoc
-      const newScoreRef = await addDoc(collection(firestore, scoreBoardName), {
+      const newScoreRef = doc(collection(firestore, scoreBoardName));
+      console.log(`New Score Ref id: ${newScoreRef.id}`);
+      await setDoc(newScoreRef, {
+        id: newScoreRef.id,
         score: lastTimeScore,
         username: username,
       });
-      console.log(newScoreRef.id);
+      setSubmitted(true);
+
+      return "mutation done";
     } else {
       // delete the score to be deleted
       await deleteDoc(doc(firestore, scoreBoardName, scoreToDeleteId));
       // addDoc with new score
-      const newScoreRef = await addDoc(collection(firestore, scoreBoardName), {
+      const newScoreRef = doc(collection(firestore, scoreBoardName));
+      console.log(`Added score to ${newScoreRef.id}`);
+      await setDoc(newScoreRef, {
+        id: newScoreRef.id,
         score: lastTimeScore,
         username: username,
       });
-      console.log(`Added score to ${newScoreRef.id}`);
+      setSubmitted(true);
+      return "mutation done";
     }
-    setSubmitted(true);
   }
+
   return (
     <div className="mx-auto my-8 flex flex-col items-center">
       <h3 className="text-xl text-slate-100">You're in the Top Ten!</h3>
@@ -71,7 +92,9 @@ function RecordScore({
             <button
               type="button"
               className="rounded-sm bg-zinc-100 py-2 px-4 text-zinc-800"
-              onClick={() => recordScore(lastTimeScore, scoreToDeleteId)}
+              onClick={() =>
+                mutation.mutate({ lastTimeScore, scoreToDeleteId })
+              }
             >
               Submit
             </button>
