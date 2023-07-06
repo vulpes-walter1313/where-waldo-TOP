@@ -1,8 +1,3 @@
 # where-waldo-TOP
 
-# Progress
-
-Need to do several things
-
-1. Setup react router to have a page dedicated to just the scores.
-2. Arrange the work to use react query for data fetching.
+The goal of this project is to have a working where is waldo app. There are two characters, waldo and the wizard that you must find. There is an easy game and a hard game, Both have their respective public scoreboards that people can add their name to if their name is in the top 10.
