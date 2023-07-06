@@ -13,7 +13,7 @@ function App() {
     <div className="min-h-screen bg-slate-800 p-8">
       <header className="flex flex-col items-center">
         <h1 className="text-5xl font-bold text-slate-50">Where's Waldo?</h1>
-        <p className="mb-8 text-slate-100">
+        <p className="text-slate-100">
           Made by Vosram as a practice from{" "}
           <a
             href="https://www.theodinproject.com"
@@ -23,6 +23,10 @@ function App() {
           >
             The Odin Project
           </a>
+        </p>
+        <p className="mb-8 mt-4 max-w-sm rounded-md bg-slate-600 py-2 text-center text-lg text-slate-50">
+          The game is simple. Can you find both Waldo and the Wizard in the
+          images?
         </p>
       </header>
       <main>
