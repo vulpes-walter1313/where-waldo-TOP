@@ -57,15 +57,15 @@ function Gameboard({
     const x =
       e.pageX - (e.currentTarget.offsetParent as HTMLElement).offsetLeft;
     const y = e.pageY - (e.currentTarget.offsetParent as HTMLElement).offsetTop;
-    console.log(`Click was on screenX: ${e.screenX} screenY: ${e.screenY}`);
-    console.log("Click was on:");
-    console.log({ x, y });
-    console.log(
-      `The size of this image is ${e.currentTarget.width} x ${e.currentTarget.height}`
-    );
+    // console.log(`Click was on screenX: ${e.screenX} screenY: ${e.screenY}`);
+    // console.log("Click was on:");
+    // console.log({ x, y });
+    // console.log(
+    //   `The size of this image is ${e.currentTarget.width} x ${e.currentTarget.height}`
+    // );
     const xRel = x / e.currentTarget.width;
     const yRel = y / e.currentTarget.height;
-    console.log(`The relative coords are X: ${xRel} and Y: ${yRel}`);
+    // console.log(`The relative coords are X: ${xRel} and Y: ${yRel}`);
     setLastRelClickCoords({ xRel: xRel, yRel: yRel });
     setLastScreenClickCoords({ x: e.pageX, y: e.screenY });
     setShowClickMenu(true);
