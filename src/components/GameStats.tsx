@@ -55,7 +55,7 @@ function GameStats({ lastTimeScore, gameSelected }: GameStatsProps) {
   }, [data, status]);
 
   return (
-    <div className="mx-auto w-[35rem] bg-slate-600 p-8">
+    <div className="mx-auto w-[35rem] rounded-md bg-slate-600 p-8">
       <div className="flex flex-col items-center text-slate-100">
         <p className="text-4xl">Your time {lastTimeScore} seconds!</p>
       </div>
