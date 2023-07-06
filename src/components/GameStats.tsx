@@ -24,7 +24,7 @@ function GameStats({ lastTimeScore, gameSelected }: GameStatsProps) {
       // find out how to traverse the docs and find out if lastTimeScore
       // is in top ten.
       if (status === "success") {
-        console.log(data);
+        // console.log(data);
         if (data.length < 10) {
           setIsInTopTen(true);
         } else {
@@ -37,15 +37,15 @@ function GameStats({ lastTimeScore, gameSelected }: GameStatsProps) {
             username: "this-user",
           });
           topTen.sort((a, b) => a.score - b.score);
-          console.log("top ten with this score in there");
-          console.log(topTen);
+          // console.log("top ten with this score in there");
+          // console.log(topTen);
           if (topTen.findIndex((item) => item.id === "this-score-id") < 10) {
-            console.log("this user is in the top 10");
+            // console.log("this user is in the top 10");
             setIsInTopTen(true);
             setScoreToDeleteId(topTen[10].id);
-            console.log(`Score to be deleted is ${topTen[10].id}`);
+            // console.log(`Score to be deleted is ${topTen[10].id}`);
           } else {
-            console.log("this user is not in the top 10");
+            // console.log("this user is not in the top 10");
             setIsInTopTen(false);
           }
         }
@@ -57,8 +57,7 @@ function GameStats({ lastTimeScore, gameSelected }: GameStatsProps) {
   return (
     <div className="mx-auto w-[35rem] bg-slate-600 p-8">
       <div className="flex flex-col items-center text-slate-100">
-        <h2 className="text-xl font-bold">Time:</h2>
-        <p className="text-lg">Your time {lastTimeScore} seconds!</p>
+        <p className="text-4xl">Your time {lastTimeScore} seconds!</p>
       </div>
       {isInTopTen && (
         <RecordScore

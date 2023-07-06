@@ -38,7 +38,7 @@ function RecordScore({
     if (scoreToDeleteId == null) {
       // addDoc
       const newScoreRef = doc(collection(firestore, scoreBoardName));
-      console.log(`New Score Ref id: ${newScoreRef.id}`);
+      // console.log(`New Score Ref id: ${newScoreRef.id}`);
       await setDoc(newScoreRef, {
         id: newScoreRef.id,
         score: lastTimeScore,
@@ -52,7 +52,7 @@ function RecordScore({
       await deleteDoc(doc(firestore, scoreBoardName, scoreToDeleteId));
       // addDoc with new score
       const newScoreRef = doc(collection(firestore, scoreBoardName));
-      console.log(`Added score to ${newScoreRef.id}`);
+      // console.log(`Added score to ${newScoreRef.id}`);
       await setDoc(newScoreRef, {
         id: newScoreRef.id,
         score: lastTimeScore,
@@ -67,7 +67,7 @@ function RecordScore({
     <div className="mx-auto my-8 flex flex-col items-center">
       <h3 className="text-xl text-slate-100">You're in the Top Ten!</h3>
       {submitted ? (
-        <div>
+        <div className="mt-4 flex flex-col items-center gap-4">
           <div>
             {scoreBoardName.includes("easy") ? (
               <ScoreBoard scoreBoard="top-scores-easy" />
@@ -75,7 +75,12 @@ function RecordScore({
               <ScoreBoard scoreBoard="top-scores-hard" />
             )}
           </div>
-          <a href="/">Play Again</a>
+          <a
+            href="/"
+            className="rounded-md bg-slate-100 py-1 px-4 text-slate-800"
+          >
+            Play Again
+          </a>
         </div>
       ) : (
         <div>
