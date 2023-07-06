@@ -21,7 +21,7 @@ function Root() {
     <div className="bg-slate-800 py-4">
       <QueryClientProvider client={queryClient}>
         <nav>
-          <ul className="flex justify-center gap-4">
+          <ul className="flex justify-center gap-4 pt-4">
             {links.map((link) => (
               <li
                 className="text-lg text-slate-50 underline hover:text-amber-300"
