@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "pretty": "prettier . --write"
   },
   "dependencies": {
     "@tanstack/react-query": "^4.29.19",
