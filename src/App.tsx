@@ -7,7 +7,6 @@ function App() {
   const [gameStarted, setGameStarted] = useState(false);
   const [gameSelected, setGameSelected] = useState("");
   const [gameEnded, setGameEnded] = useState(false);
-  const [lastTimeScore, setLastTimeScore] = useState(0);
 
   return (
     <div className="min-h-screen bg-slate-800 p-8">
@@ -40,12 +39,10 @@ function App() {
           <Gameboard
             gameSelected={gameSelected as "waldo-1" | "waldo-2"}
             setGameEnded={setGameEnded}
-            setLastTimeScore={setLastTimeScore}
           />
         )}
         {gameSelected && gameEnded && (
           <GameStats
-            lastTimeScore={lastTimeScore}
             gameSelected={gameSelected as "waldo-1" | "waldo-2"}
           />
         )}
