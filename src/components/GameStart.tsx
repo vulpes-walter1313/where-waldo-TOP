@@ -1,34 +1,38 @@
-import React from 'react';
+import React from "react";
 
 type GameStartProps = {
   setGameSelected: React.Dispatch<React.SetStateAction<string>>;
   setGameStarted: React.Dispatch<React.SetStateAction<boolean>>;
-}
+};
 
-function GameStart({setGameSelected, setGameStarted}: GameStartProps) {
+function GameStart({ setGameSelected, setGameStarted }: GameStartProps) {
   return (
     <div>
-      <div className='w-3/5 bg-slate-600 rounded-md mx-auto text-slate-50 p-8 flex flex-col items-center'>
-        <p className='mb-4'>Choose a game!</p>
+      <div className="mx-auto flex w-3/5 flex-col items-center rounded-md bg-slate-600 p-8 text-slate-50">
+        <p className="mb-4">Choose a game!</p>
         <div className="flex gap-8">
           <button
-            className="px-8 py-2 bg-slate-400 rounded-full font-bold text-lg"
+            className="rounded-full bg-slate-400 px-8 py-2 text-lg font-bold"
             onClick={() => {
               setGameSelected("waldo-1");
               setGameStarted(true);
-          }}
-          >Easy</button>
+            }}
+          >
+            Easy
+          </button>
           <button
-            className="px-8 py-2 bg-slate-400 rounded-full font-bold text-lg"
+            className="rounded-full bg-slate-400 px-8 py-2 text-lg font-bold"
             onClick={() => {
               setGameSelected("waldo-2");
               setGameStarted(true);
             }}
-          >Hard</button>
+          >
+            Hard
+          </button>
         </div>
       </div>
     </div>
-  )
-};
+  );
+}
 
 export default GameStart;

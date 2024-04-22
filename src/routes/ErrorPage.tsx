@@ -1,5 +1,5 @@
-import React from 'react'
-import { useRouteError } from 'react-router-dom'
+import React from "react";
+import { useRouteError } from "react-router-dom";
 
 export default function ErrorPage() {
   const error = useRouteError();
@@ -13,5 +13,5 @@ export default function ErrorPage() {
         <i>{error instanceof Error ? error.message : "Generic Error"}</i>
       </p>
     </div>
-  )
+  );
 }

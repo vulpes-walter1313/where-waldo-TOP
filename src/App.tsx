@@ -7,6 +7,10 @@ function App() {
   const [gameStarted, setGameStarted] = useState(false);
   const [gameSelected, setGameSelected] = useState("");
   const [gameEnded, setGameEnded] = useState(false);
+  const [charactersFound, setCharactersFound] = useState({
+    waldo: false,
+    wizard: false,
+  });
 
   return (
     <div className="min-h-screen bg-slate-800 p-8">
@@ -36,15 +40,25 @@ function App() {
           />
         )}
         {gameStarted && !gameEnded && (
+          <div className="mx-auto mb-6 w-full max-w-xs rounded-md bg-slate-700 px-6 py-4 text-slate-50">
+            <p>You have found:</p>
+            {charactersFound.waldo ? <p>Waldo!</p> : null}
+            {charactersFound.wizard ? <p>Wizard!</p> : null}
+            {!charactersFound.waldo && !charactersFound.wizard ? (
+              <p>Neither lol</p>
+            ) : null}
+          </div>
+        )}
+        {gameStarted && !gameEnded && (
           <Gameboard
             gameSelected={gameSelected as "waldo-1" | "waldo-2"}
             setGameEnded={setGameEnded}
+            charactersFound={charactersFound}
+            setCharactersFound={setCharactersFound}
           />
         )}
         {gameSelected && gameEnded && (
-          <GameStats
-            gameSelected={gameSelected as "waldo-1" | "waldo-2"}
-          />
+          <GameStats gameSelected={gameSelected as "waldo-1" | "waldo-2"} />
         )}
       </main>
     </div>

@@ -1,79 +1,51 @@
-import { addDoc, collection, deleteDoc, doc, setDoc } from "firebase/firestore";
 import React, { useState } from "react";
-import { firestore } from "../lib/firebase";
 import ScoreBoard from "./ScoreBoard";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { fetchGameStats } from "../lib/queryfunctions";
 
 type RecordScoreProps = {
-  lastTimeScore: number;
-  scoreToDeleteId?: string | null;
   gameSelected: "waldo-1" | "waldo-2";
 };
-function RecordScore({
-  lastTimeScore,
-  scoreToDeleteId,
-  gameSelected,
-}: RecordScoreProps) {
+
+function RecordScore({ gameSelected }: RecordScoreProps) {
   const queryClient = useQueryClient();
   const [username, setUsername] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const scoreBoardName: "top-scores-easy" | "top-scores-hard" = `top-scores-${
-    gameSelected === "waldo-1" ? "easy" : "hard"
-  }`;
-
-  const mutation = useMutation({
-    mutationFn: recordScore,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["scores", scoreBoardName] });
-    },
+  const gameStatsQuery = useQuery({
+    queryKey: ["gamestats"],
+    queryFn: fetchGameStats,
   });
 
-  async function recordScore({
-    lastTimeScore,
-    scoreToDeleteId,
-  }: {
-    lastTimeScore: number;
-    scoreToDeleteId: string | null | undefined;
-  }) {
-    if (scoreToDeleteId == null) {
-      // addDoc
-      const newScoreRef = doc(collection(firestore, scoreBoardName));
-      // console.log(`New Score Ref id: ${newScoreRef.id}`);
-      await setDoc(newScoreRef, {
-        id: newScoreRef.id,
-        score: lastTimeScore,
-        username: username,
+  const scoreMutation = useMutation({
+    mutationFn: async () => {
+      const rawRes = await fetch("http://localhost:3010/scoreboard", {
+        method: "POST",
+        mode: "cors",
+        credentials: "include",
+        body: JSON.stringify({ username: username }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
-      setSubmitted(true);
-
-      return "mutation done";
-    } else {
-      // delete the score to be deleted
-      await deleteDoc(doc(firestore, scoreBoardName, scoreToDeleteId));
-      // addDoc with new score
-      const newScoreRef = doc(collection(firestore, scoreBoardName));
-      // console.log(`Added score to ${newScoreRef.id}`);
-      await setDoc(newScoreRef, {
-        id: newScoreRef.id,
-        score: lastTimeScore,
-        username: username,
-      });
-      setSubmitted(true);
-      return "mutation done";
-    }
-  }
+      const res = await rawRes.json();
+      if (res.success) {
+        return res;
+      } else {
+        throw new Error("Error occured in trying to add new score");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["scores", gameSelected] });
+      queryClient.invalidateQueries({ queryKey: ["gamestats"] });
+    },
+  });
 
   return (
     <div className="mx-auto my-8 flex flex-col items-center">
       <h3 className="text-xl text-slate-100">You're in the Top Ten!</h3>
-      {submitted ? (
+      {gameStatsQuery.data && gameStatsQuery.data.scoreSubmitted ? (
         <div className="mt-4 flex flex-col items-center gap-4">
           <div>
-            {scoreBoardName.includes("easy") ? (
-              <ScoreBoard scoreBoard="top-scores-easy" />
-            ) : (
-              <ScoreBoard scoreBoard="top-scores-hard" />
-            )}
+            <ScoreBoard gameSelected={gameSelected} />
           </div>
           <a
             href="/"
@@ -82,7 +54,9 @@ function RecordScore({
             Play Again
           </a>
         </div>
-      ) : (
+      ) : null}
+      {scoreMutation.isLoading ? <p>Score is being submitted...</p> : null}
+      {gameStatsQuery.data && gameStatsQuery.data.scoreSubmitted === false ? (
         <div>
           <p className="capitalize text-slate-100">
             Enter a name to submit your score!
@@ -97,15 +71,13 @@ function RecordScore({
             <button
               type="button"
               className="rounded-sm bg-zinc-100 py-2 px-4 text-zinc-800"
-              onClick={() =>
-                mutation.mutate({ lastTimeScore, scoreToDeleteId })
-              }
+              onClick={() => scoreMutation.mutate()}
             >
               Submit
             </button>
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

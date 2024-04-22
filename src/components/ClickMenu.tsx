@@ -19,10 +19,10 @@ export default function ClickMenu({
   if (show) {
     return (
       <div
-        className={`bg-gray-900 fixed z-10 p-4`}
+        className={`fixed z-10 bg-gray-900 p-4`}
         style={{ top: `${coords.y - 110}px`, left: `${coords.x - 150}px` }}
       >
-        <div className="flex justify-between text-gray-50 w-48">
+        <div className="flex w-48 justify-between text-gray-50">
           <p className="text-gray-50">Who did you find?</p>
           <p className="cursor-pointer" onClick={() => setShowClickMenu(false)}>
             X

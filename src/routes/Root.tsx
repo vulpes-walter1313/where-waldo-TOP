@@ -33,7 +33,7 @@ function Root() {
           </ul>
         </nav>
         <Outlet />
-        <ReactQueryDevtools initialIsOpen={false}/>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </div>
   );

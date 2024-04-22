@@ -7,10 +7,10 @@ export default function ScoreBoardPage() {
       <h1 className="mb-6 text-center text-4xl text-slate-50">Score Boards</h1>
       <section className="mx-auto flex max-w-7xl justify-center gap-8">
         <div>
-          <ScoreBoard scoreBoard="top-scores-easy" />
+          <ScoreBoard gameSelected="waldo-1" />
         </div>
         <div>
-          <ScoreBoard scoreBoard="top-scores-hard" />
+          <ScoreBoard gameSelected="waldo-2" />
         </div>
       </section>
       <section className="m-8 flex flex-col items-center">

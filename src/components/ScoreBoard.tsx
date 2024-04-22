@@ -1,51 +1,40 @@
-import React, { useEffect, useState } from "react";
-import type { ScoresBoardDataType } from "../types/types";
-import { collection, getDocs } from "firebase/firestore";
-import { firestore } from "../lib/firebase";
+import React from "react";
 import { twMerge } from "tailwind-merge";
 import { useQuery } from "@tanstack/react-query";
-import useGetScores from "../hooks/useGetScores";
+import { fetchScores } from "../lib/queryfunctions";
 
 type ScoreBoardProps = {
-  scoreBoard: "top-scores-easy" | "top-scores-hard";
+  gameSelected: "waldo-1" | "waldo-2";
   className?: string;
 };
 
-function ScoreBoard({ scoreBoard, className }: ScoreBoardProps) {
-  const { data, isInitialLoading, isLoading, isError, error } = useGetScores(scoreBoard);
-  
+function ScoreBoard({ gameSelected, className }: ScoreBoardProps) {
+  const scoresQuery = useQuery({
+    queryKey: ["scores", gameSelected],
+    queryFn: async () => {
+      const data = await fetchScores(gameSelected);
+      return data;
+    },
+  });
+
   const containerStyles = "bg-slate-700 px-8 py-4 rounded-md";
   const styles = twMerge(containerStyles, `${className ? className : ""}`);
-
-  if (isInitialLoading || isLoading) {
-    return <p className="text-slate-50">Loading...</p>;
-  }
-
-  if (isError) {
-    return (
-      <p>
-        Error:{" "}
-        {error instanceof Error ? error.message : "Some error in React Query"}
-      </p>
-    );
-  }
 
   return (
     <div className={styles}>
       <p className="mb-2 text-lg text-slate-50">
-        {scoreBoard.includes("easy")
-          ? "Top Scores - Easy"
-          : "Top Scores - Hard"}
+        {gameSelected === "waldo-1" ? "Top Scores - Easy" : "Top Scores - Hard"}
       </p>
       <hr className="mb-2 border-slate-50" />
       <ol className="list-inside list-decimal text-slate-50">
-        {data
-          .sort((a, b) => a.score - b.score)
-          .map((score) => (
-            <li key={score.score}>
-              {score.username} - {score.score}s
-            </li>
-          ))}
+        {scoresQuery.data &&
+          scoresQuery.data.topScores.map(
+            (score: { _id: string; username: string; scoreMillis: number }) => (
+              <li key={score._id}>
+                {score.username} - {(score.scoreMillis / 1000).toString()}s
+              </li>
+            )
+          )}
       </ol>
     </div>
   );
