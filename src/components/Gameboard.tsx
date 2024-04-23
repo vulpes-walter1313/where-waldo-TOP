@@ -68,22 +68,28 @@ function Gameboard({
   });
 
   function handleImageClick(e: React.MouseEvent<HTMLImageElement, MouseEvent>) {
-    console.log("currentTarget Height", e.currentTarget.height);
-    console.log("currentTarget Width", e.currentTarget.width);
-    console.dir(e);
-    console.dir(e.target);
-    console.dir(e.currentTarget);
+    if (!import.meta.env.PROD) {
+      // print if in dev
+      console.log("currentTarget Height", e.currentTarget.height);
+      console.log("currentTarget Width", e.currentTarget.width);
+      console.dir(e);
+      console.dir(e.target);
+      console.dir(e.currentTarget);
+    }
     // these coordinates are the actual coordinates from the document.
     // offset values provide the compensation for margin and padding around the image
     const x =
       e.pageX - (e.currentTarget.offsetParent as HTMLElement).offsetLeft;
     const y = e.pageY - (e.currentTarget.offsetParent as HTMLElement).offsetTop;
-    console.log(`Click was on screenX: ${e.screenX} screenY: ${e.screenY}`);
-    console.log("Click was on:");
-    console.log({ x, y });
-    console.log(
-      `The size of this image is ${e.currentTarget.width} x ${e.currentTarget.height}`
-    );
+    if (!import.meta.env.PROD) {
+      // print if in dev
+      console.log(`Click was on screenX: ${e.screenX} screenY: ${e.screenY}`);
+      console.log("Click was on:");
+      console.log({ x, y });
+      console.log(
+        `The size of this image is ${e.currentTarget.width} x ${e.currentTarget.height}`
+      );
+    }
     const imgWidthpx = e.currentTarget.width;
     const imgHeightpx = e.currentTarget.height;
     // console.log(`The relative coords are X: ${xRel} and Y: ${yRel}`);
