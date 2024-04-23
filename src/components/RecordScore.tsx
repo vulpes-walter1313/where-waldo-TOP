@@ -17,15 +17,22 @@ function RecordScore({ gameSelected }: RecordScoreProps) {
 
   const scoreMutation = useMutation({
     mutationFn: async () => {
-      const rawRes = await fetch("http://localhost:3010/scoreboard", {
-        method: "POST",
-        mode: "cors",
-        credentials: "include",
-        body: JSON.stringify({ username: username }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const rawRes = await fetch(
+        `${
+          import.meta.env.PROD
+            ? import.meta.env.VITE_BE_PROD_ADDR
+            : import.meta.env.VITE_BE_DEV_ADDR
+        }/scoreboard`,
+        {
+          method: "POST",
+          mode: "cors",
+          credentials: "include",
+          body: JSON.stringify({ username: username }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const res = await rawRes.json();
       if (res.success) {
         return res;
