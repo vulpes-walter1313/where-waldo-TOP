@@ -1,11 +1,18 @@
 // useQuery Function
 // queryKey: ["gamestates"]
 export const fetchGameStats = async () => {
-  const rawRes = await fetch("http://localhost:3010/gamestats", {
-    method: "GET",
-    credentials: "include",
-    mode: "cors",
-  });
+  const rawRes = await fetch(
+    `${
+      import.meta.env.PROD
+        ? import.meta.env.VITE_BE_PROD_ADDR
+        : import.meta.env.VITE_BE_DEV_ADDR
+    }/gamestats`,
+    {
+      method: "GET",
+      credentials: "include",
+      mode: "cors",
+    }
+  );
 
   const res = await rawRes.json();
   if (res.success) {
@@ -17,7 +24,11 @@ export const fetchGameStats = async () => {
 
 export const fetchScores = async (game: "waldo-1" | "waldo-2") => {
   const rawRes = await fetch(
-    `http://localhost:3010/scoreboard?limit=50&gameName=${game}`,
+    `${
+      import.meta.env.PROD
+        ? import.meta.env.VITE_BE_PROD_ADDR
+        : import.meta.env.VITE_BE_DEV_ADDR
+    }/scoreboard?limit=50&gameName=${game}`,
     {
       method: "GET",
       mode: "cors",

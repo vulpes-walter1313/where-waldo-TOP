@@ -28,7 +28,11 @@ function Gameboard({
     queryKey: ["gameimage", imageCode],
     queryFn: async () => {
       const rawRes = await fetch(
-        `http://localhost:3010/gameimage?imageCode=${imageCode}`,
+        `${
+          import.meta.env.PROD
+            ? import.meta.env.VITE_BE_PROD_ADDR
+            : import.meta.env.VITE_BE_DEV_ADDR
+        }/gameimage?imageCode=${imageCode}`,
         {
           method: "GET",
           mode: "cors",
@@ -96,21 +100,28 @@ function Gameboard({
   async function handleCharacterClick(character: "waldo" | "wizard") {
     if (character === "waldo" && !charactersFound.waldo) {
       // check if lastRelClickCoords match for Waldo Character
-      const rawRes = await fetch("http://localhost:3010/verifyclick", {
-        method: "POST",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          character: character,
-          xCoord: lastClickCoords.xCoord,
-          yCoord: lastClickCoords.yCoord,
-          widthpx: lastClickCoords.imgWidthpx,
-          heightpx: lastClickCoords.imgHeightpx,
-        }),
-      });
+      const rawRes = await fetch(
+        `${
+          import.meta.env.PROD
+            ? import.meta.env.VITE_BE_PROD_ADDR
+            : import.meta.env.VITE_BE_DEV_ADDR
+        }/verifyclick`,
+        {
+          method: "POST",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            character: character,
+            xCoord: lastClickCoords.xCoord,
+            yCoord: lastClickCoords.yCoord,
+            widthpx: lastClickCoords.imgWidthpx,
+            heightpx: lastClickCoords.imgHeightpx,
+          }),
+        }
+      );
       const res = await rawRes.json();
       if (res.success) {
         if (res.clickIsCorrect) {
@@ -121,21 +132,28 @@ function Gameboard({
         }
       }
     } else if (character === "wizard" && !charactersFound.wizard) {
-      const rawRes = await fetch("http://localhost:3010/verifyclick", {
-        method: "POST",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          character: character,
-          xCoord: lastClickCoords.xCoord,
-          yCoord: lastClickCoords.yCoord,
-          widthpx: lastClickCoords.imgWidthpx,
-          heightpx: lastClickCoords.imgHeightpx,
-        }),
-      });
+      const rawRes = await fetch(
+        `${
+          import.meta.env.PROD
+            ? import.meta.env.VITE_BE_PROD_ADDR
+            : import.meta.env.VITE_BE_DEV_ADDR
+        }/verifyclick`,
+        {
+          method: "POST",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            character: character,
+            xCoord: lastClickCoords.xCoord,
+            yCoord: lastClickCoords.yCoord,
+            widthpx: lastClickCoords.imgWidthpx,
+            heightpx: lastClickCoords.imgHeightpx,
+          }),
+        }
+      );
       const res = await rawRes.json();
       if (res.success) {
         if (res.clickIsCorrect) {
