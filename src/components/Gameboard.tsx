@@ -180,7 +180,7 @@ function Gameboard({
   }, [charactersFound]);
 
   return (
-    <div className="relative">
+    <div className="relative max-w-max mx-auto">
       {imgQuery.isLoading ? (
         <p className="mx-auto text-center text-lg text-slate-50">Loading...</p>
       ) : null}
